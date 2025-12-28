@@ -1,2 +1,0 @@
-passlib[bcrypt]
-python-jose
