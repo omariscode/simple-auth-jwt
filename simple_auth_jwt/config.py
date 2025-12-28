@@ -1,0 +1,6 @@
+import os
+
+SECRET_KEY = os.getenv("SIMPLE_AUTH_SECRET", "change-this")
+ALGORITHM = "HS256"
+ACCESS_EXPIRE_MIN = 30
+REFRESH_EXPIRE_DAYS = 7
