@@ -1,16 +1,16 @@
 from datetime import datetime, timedelta
 from jose import jwt
-from .config import *
+from simple_auth_jwt.config import AuthConfig
 
-def create_access(payload):
-    data = payload.copy()
-    data["exp"] = datetime.utcnow() + timedelta(minutes=ACCESS_EXPIRE_MIN)
-    return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+def create_access(user_id: int):
+    expire = datetime.utcnow() + timedelta(minutes=AuthConfig.access_expire_min)
+    payload = {"sub": user_id, "exp": expire}
+    return jwt.encode(payload, AuthConfig.secret_key, algorithm="HS256")
 
-def create_refresh(payload):
-    data = payload.copy()
-    data["exp"] = datetime.utcnow() + timedelta(days=REFRESH_EXPIRE_DAYS)
-    return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+def create_refresh(user_id: int):
+    expire = datetime.utcnow() + timedelta(days=AuthConfig.refresh_expire_days)
+    payload = {"sub": user_id, "exp": expire}
+    return jwt.encode(payload, AuthConfig.secret_key, algorithm="HS256")
 
-def decode_token(token):
-    return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+def decode_token(token: str):
+    return jwt.decode(token, AuthConfig.secret_key, algorithms=["HS256"])

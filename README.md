@@ -21,7 +21,7 @@ pip install simple-auth-jwt
 Or from source:
 
 ```bash
-git clone https://github.com/omarscode/simple-auth-jwt.git
+git clone https://github.com/omariscode/simple-auth-jwt.git
 cd simple-auth-jwt
 pip install .
 ```
@@ -124,17 +124,13 @@ from simple_auth_jwt.middlewares.flask import auth_middleware
 
 app = Flask(__name__)
 
-# Use as decorator or in before_request
-@app.before_request
-def authenticate():
-    auth_middleware()  # Implement similar to FastAPI
-
 @app.route("/protected")
+@auth_middleware
 def protected_route():
     return {"message": "This is protected!"}
 ```
 
-Note: The Flask middleware is similar but adapted for Flask's request handling.
+Note: The Flask is a decorator.
 
 ### Full Flask Example
 
@@ -161,7 +157,7 @@ def login_endpoint():
     except ValueError:
         return jsonify({"error": "Invalid credentials"}), 401
 
-# Add protection as needed
+# Add protection as needed.
 ```
 
 ## Configuration

@@ -1,9 +1,18 @@
-from passlib.context import CryptContext
+from passlib.hash import bcrypt
+from simple_auth_jwt.config import AuthConfig
 
-pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
+_custom_hasher = None
 
-def hash_password(password):
-    return pwd.hash(password)
+def use_hasher(hasher):
+    global _custom_hasher
+    _custom_hasher = hasher
 
-def verify_password(password, hashed):
-    return pwd.verify(password, hashed)
+def hash_password(password: str) -> str:
+    if _custom_hasher:
+        return _custom_hasher.generate_password_hash(password)
+    return bcrypt.hash(password)
+
+def verify_password(hash: str, password: str) -> bool:
+    if _custom_hasher:
+        return _custom_hasher.check_password_hash(hash, password)
+    return bcrypt.verify(password, hash)

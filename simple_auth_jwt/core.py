@@ -1,24 +1,28 @@
-from .crypto import verify_password
-from .jwt_handler import create_access, create_refresh
+# simple_auth_jwt/core.py
+from simple_auth_jwt.config import AuthConfig, configure
+from simple_auth_jwt.jwt_handler import create_access, create_refresh
+from simple_auth_jwt.crypto import verify_password
 
-repo = None
+_repo = None
 
-def init(user_repository):
-    global repo
-    repo = user_repository
+def init(user_repo):
+    global _repo
+    _repo = user_repo
 
-def login(email, password):
-    if not repo:
-        raise RuntimeError("Call simple_auth.init() first")
+def login(email: str, password: str):
+    if _repo is None:
+        raise Exception("UserRepository não inicializado")
 
-    user = repo.get_by_email(email)
+    user = _repo.get_by_email(email)
     if not user:
-        raise ValueError("Invalid credentials")
+        raise Exception("Usuário não encontrado")
 
-    if not verify_password(password, user.password):
-        raise ValueError("Invalid credentials")
+    if not verify_password(user.password, password):
+        raise Exception("Senha incorreta")
 
+    access_token = create_access(user.id)
+    refresh_token = create_refresh(user.id)
     return {
-        "access": create_access({"sub": user.email}),
-        "refresh": create_refresh({"sub": user.email})
+        "access": access_token,
+        "refresh": refresh_token
     }

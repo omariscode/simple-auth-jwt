@@ -1,10 +1,19 @@
-from fastapi import Request, HTTPException
+from functools import wraps
+from flask import request, jsonify
 from ..jwt_handler import decode_token
 
-async def auth_middleware(request: Request, call_next):
-    token = request.headers.get("Authorization")
-    if not token:
-        raise HTTPException(401, "Missing token")
 
-    decode_token(token.split()[1])
-    return await call_next(request)
+def auth_middleware(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        token = request.headers.get("Authorization")
+
+        if not token:
+            return jsonify({"error": "Missing token"}), 401
+
+        token = token.split()[1]
+
+        decode_token(token)
+
+        return f(*args, **kwargs)
+    return wrapper

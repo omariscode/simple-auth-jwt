@@ -1,6 +1,6 @@
 [project]
 name = "simple-auth-jwt"
-version = "0.1.1"
+version = "0.2.0"
 description = "Plug-and-play JWT authentication SDK for Flask and FastAPI"
 readme = "README.md"
 requires-python = ">=3.9"

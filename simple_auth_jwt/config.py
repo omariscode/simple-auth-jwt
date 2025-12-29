@@ -1,6 +1,10 @@
-import os
+class AuthConfig:
+    secret_key = "change-me"
+    access_expire_min = 30
+    refresh_expire_days = 7
 
-SECRET_KEY = os.getenv("SIMPLE_AUTH_SECRET", "change-this")
-ALGORITHM = "HS256"
-ACCESS_EXPIRE_MIN = 30
-REFRESH_EXPIRE_DAYS = 7
+def configure(**kwargs):
+
+    for key, value in kwargs.items():
+        if hasattr(AuthConfig, key):
+            setattr(AuthConfig, key, value)
