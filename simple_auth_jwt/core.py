@@ -1,4 +1,3 @@
-# simple_auth_jwt/core.py
 from simple_auth_jwt.config import AuthConfig, configure
 from simple_auth_jwt.jwt_handler import create_access, create_refresh
 from simple_auth_jwt.crypto import verify_password

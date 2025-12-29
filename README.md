@@ -7,7 +7,7 @@ A simple, plug-and-play JWT authentication SDK for Python web frameworks like Fl
 - JWT token generation (access and refresh tokens)
 - Password hashing and verification
 - Middleware for FastAPI and Flask to protect routes
-- Configurable via environment variables
+- Programmatic configuration
 - Lightweight and easy to integrate
 
 ## Installation
@@ -28,14 +28,18 @@ pip install .
 
 ## Quick Start
 
-### 1. Set Environment Variables
+### 1. Configure the SDK
 
-Configure your JWT settings using environment variables:
+Configure your JWT settings programmatically:
 
-```bash
-export SIMPLE_AUTH_SECRET="your-secret-key-here"
-export SIMPLE_AUTH_ACCESS_EXPIRE_MIN=30
-export SIMPLE_AUTH_REFRESH_EXPIRE_DAYS=7
+```python
+from simple_auth_jwt import configure
+
+configure(
+    secret_key="your-secret-key-here",
+    access_expire_min=30,
+    refresh_expire_days=7
+)
 ```
 
 ### 2. Initialize the SDK
@@ -162,13 +166,29 @@ def login_endpoint():
 
 ## Configuration
 
-The SDK uses the following environment variables:
+Configure the SDK using the `configure` function with the following parameters:
 
-- `SIMPLE_AUTH_SECRET`: Secret key for JWT signing (default: "change-this")
-- `SIMPLE_AUTH_ACCESS_EXPIRE_MIN`: Access token expiration in minutes (default: 30)
-- `SIMPLE_AUTH_REFRESH_EXPIRE_DAYS`: Refresh token expiration in days (default: 7)
+- `secret_key`: Secret key for JWT signing (default: "change-me")
+- `access_expire_min`: Access token expiration in minutes (default: 30)
+- `refresh_expire_days`: Refresh token expiration in days (default: 7)
+
+Example:
+
+```python
+from simple_auth_jwt import configure
+
+configure(secret_key="my-secret", access_expire_min=60)
+```
 
 ## API Reference
+
+### `configure(**kwargs)`
+
+Configure the SDK settings.
+
+- `secret_key`: Secret key for JWT signing
+- `access_expire_min`: Access token expiration in minutes
+- `refresh_expire_days`: Refresh token expiration in days
 
 ### `init(user_repository)`
 
